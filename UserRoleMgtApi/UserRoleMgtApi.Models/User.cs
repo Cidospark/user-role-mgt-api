@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace UserRoleMgtApi.Models
 {
-    public class User
+    public class User : IdentityUser
     {
         [Required]
         [StringLength(15, MinimumLength = 3, ErrorMessage = "Must be between 3 and 15")]
