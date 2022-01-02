@@ -13,6 +13,11 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using UserRoleMgtApi.Services;
+using UserRoleMgtApi.Data.EFCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using UserRoleMgtApi.Models;
 
 namespace UserRoleMgtApi.Core
 {
@@ -29,6 +34,11 @@ namespace UserRoleMgtApi.Core
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddDbContextPool<AppDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
+            services.AddScoped<JWTService, JWTService>();
 
             services.AddSwaggerGen(c =>
             {
