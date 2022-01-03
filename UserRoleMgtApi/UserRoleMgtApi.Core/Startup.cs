@@ -38,7 +38,7 @@ namespace UserRoleMgtApi.Core
             services.AddDbContextPool<AppDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
-            services.AddScoped<JWTService, JWTService>();
+            services.AddScoped<IJWTService, JWTService>();
 
             services.AddSwaggerGen(c =>
             {

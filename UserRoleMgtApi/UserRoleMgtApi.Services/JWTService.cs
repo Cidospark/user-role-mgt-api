@@ -10,7 +10,7 @@ using UserRoleMgtApi.Models;
 namespace UserRoleMgtApi.Services
 {
 
-    public class JWTService : IJWTSwervice
+    public class JWTService : IJWTService
     {
         private readonly IConfiguration _config;
 

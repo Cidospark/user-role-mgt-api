@@ -4,7 +4,7 @@ using UserRoleMgtApi.Models;
 
 namespace UserRoleMgtApi.Services
 {
-    public interface IJWTSwervice
+    public interface IJWTService
     {
         public string GenerateToken(User user, List<string> userRoles);
     }
