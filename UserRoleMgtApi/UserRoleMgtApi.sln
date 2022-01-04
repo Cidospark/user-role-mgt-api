@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserRoleMgtApi.Services", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserRoleMgtApi.Data", "UserRoleMgtApi.Data\UserRoleMgtApi.Data.csproj", "{6DB32A34-98D6-4EF2-928C-BE27D7C4C0C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserRoleMgtApi.Helpers", "UserRoleMgtApi.Helpers\UserRoleMgtApi.Helpers.csproj", "{61EBDD43-36A2-41CC-A0C2-9430982640EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6DB32A34-98D6-4EF2-928C-BE27D7C4C0C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DB32A34-98D6-4EF2-928C-BE27D7C4C0C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DB32A34-98D6-4EF2-928C-BE27D7C4C0C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61EBDD43-36A2-41CC-A0C2-9430982640EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61EBDD43-36A2-41CC-A0C2-9430982640EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61EBDD43-36A2-41CC-A0C2-9430982640EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61EBDD43-36A2-41CC-A0C2-9430982640EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
