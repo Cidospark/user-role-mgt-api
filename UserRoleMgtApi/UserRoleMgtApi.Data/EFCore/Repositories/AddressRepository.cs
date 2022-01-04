@@ -1,18 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using WalkingSkeletonApi.Data.EFCore;
-using WalkingSkeletonApi.Models;
+using UserRoleMgtApi.Models;
 
-namespace WalkingSkeletonApi.Data.Repositories.EFCoreRepositories
+namespace UserRoleMgtApi.Data.EFCore.Repositories
 {
     public class AddressRepository : IAddressRepository
     {
-        private readonly WalkingSkeletonDbContext _ctx;
+        private readonly AppDbContext _ctx;
 
-        public AddressRepository(WalkingSkeletonDbContext ctx)
+        public AddressRepository(AppDbContext ctx)
         {
             _ctx = ctx;
         }
@@ -37,32 +34,17 @@ namespace WalkingSkeletonApi.Data.Repositories.EFCoreRepositories
 
         public async Task<Address> GetAddress(string userId)
         {
-            //return await _ctx.Address.Where(x => x.AppUserId == userId).FirstOrDefaultAsync();
-            return await _ctx.Address.Include(x => x.AppUser).FirstAsync(x => x.AppUserId == userId);
+            return await _ctx.Addresses.Include(x => x.User).FirstAsync(x => x.Id == userId);
         }
 
         public async Task<List<Address>> GetAddresses()
         {
-            return await _ctx.Address.ToListAsync();
-            //return await _ctx.Address
-            //            .Select(x => new {
-            //                Id = x.AppUserId,
-            //                address = $"{x.Street} {x.State} {x.Country}"
-            //            }).OrderByDescending(k => k.Id).ThenByDescending(a => a.address)
-            //            .ToListAsync();
-
-            /*
-             return await _ctx.Address.GroupBy(i => i.AppUserId).Select(x => new
-            {
-                addressId = x.Key,
-                addressses = x.Count()
-            }).ToListAsync();
-             */
+            return await _ctx.Addresses.ToListAsync();
         }
 
         public async Task<int> RowCount()
         {
-            return await _ctx.Address.CountAsync(); ;
+            return await _ctx.Addresses.CountAsync(); ;
         }
 
         public async Task<bool> SaveChanges()

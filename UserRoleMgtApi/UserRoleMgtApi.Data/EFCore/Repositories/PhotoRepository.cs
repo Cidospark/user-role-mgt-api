@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WalkingSkeletonApi.Data.EFCore;
-using WalkingSkeletonApi.Models;
 
-namespace WalkingSkeletonApi.Data.Repositories.EFCoreRepositories
+namespace UserRoleMgtApi.Data.EFCore.Repositories
 {
     public class PhotoRepository : IPhotoRepository
     {
