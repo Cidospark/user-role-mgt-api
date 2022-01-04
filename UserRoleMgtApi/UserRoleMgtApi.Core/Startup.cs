@@ -12,6 +12,8 @@ using UserRoleMgtApi.Data.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using UserRoleMgtApi.Models;
+using UserRoleMgtApi.Helpers;
+using AutoMapper;
 
 namespace UserRoleMgtApi.Core
 {
@@ -33,6 +35,7 @@ namespace UserRoleMgtApi.Core
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
             services.AddScoped<IJWTService, JWTService>();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
             services.AddSwaggerGen(c =>
             {
@@ -77,6 +80,8 @@ namespace UserRoleMgtApi.Core
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("JWT:Key").Value))
                 };
             });
+
+            services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

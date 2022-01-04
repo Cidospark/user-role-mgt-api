@@ -44,5 +44,8 @@
     <ProjectReference Include="..\UserRoleMgtApi.Models\UserRoleMgtApi.Models.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
+    <ProjectReference Include="..\UserRoleMgtApi.Helpers\UserRoleMgtApi.Helpers.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>
