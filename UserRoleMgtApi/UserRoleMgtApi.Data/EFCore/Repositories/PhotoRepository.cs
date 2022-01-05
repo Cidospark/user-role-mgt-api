@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserRoleMgtApi.Models;
 
 namespace UserRoleMgtApi.Data.EFCore.Repositories
 {
     public class PhotoRepository : IPhotoRepository
     {
-        private readonly WalkingSkeletonDbContext _ctx;
+        private readonly AppDbContext _ctx;
 
-        public PhotoRepository(WalkingSkeletonDbContext ctx)
+        public PhotoRepository(AppDbContext ctx)
         {
             _ctx = ctx;
         }
@@ -43,7 +44,7 @@ namespace UserRoleMgtApi.Data.EFCore.Repositories
 
         public async Task<List<Photo>> GetPhotosByUserId(string UserId)
         {
-            return await _ctx.Photos.Where(x => x.AppUserId == UserId).ToListAsync();
+            return await _ctx.Photos.Where(x => x.Id == UserId).ToListAsync();
         }
 
         public async Task<bool> SaveChanges()

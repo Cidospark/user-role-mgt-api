@@ -6,7 +6,7 @@ using UserRoleMgtApi.Models.Dtos;
 
 namespace UserRoleMgtApi.Services
 {
-    public interface EmptyInterface
+    public interface IPhotoService
     {
         public Task<Tuple<bool, PhotoUploadDto>> UploadPhotoAsync(PhotoUploadDto model, string userId);
         public Task<Tuple<bool, PhotoUploadDto>> AddPhotoAsync(PhotoUploadDto model, string userId);
