@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using UserRoleMgtApi.Data.EFCore.Repositories;
 using UserRoleMgtApi.Helpers;
@@ -56,6 +58,22 @@ namespace UserRoleMgtApi.Services
 
             return new Tuple<bool, PhotoUploadDto>(false, model);
 
+        }
+
+        public async Task<Tuple<bool, PhotoUploadDto>> AddPhotoAsync(PhotoUploadDto model, string userId)
+        {
+            var user = await _userMgr.Users.Include(x => x.Photos).FirstOrDefaultAsync(x => x.Id == userId);
+
+            var photo = _mapper.Map<Photo>(model);
+            photo.Id = userId;
+
+            if (!user.Photos.Any(x => x.IsMain))
+                photo.IsMain = true;
+
+            // add photo to database
+            var res = await _photoRepo.Add(photo);
+
+            return new Tuple<bool, PhotoUploadDto>(res, model);
         }
 
     }
