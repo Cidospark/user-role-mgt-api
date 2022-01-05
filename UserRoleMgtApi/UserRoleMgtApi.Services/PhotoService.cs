@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -74,6 +75,95 @@ namespace UserRoleMgtApi.Services
             var res = await _photoRepo.Add(photo);
 
             return new Tuple<bool, PhotoUploadDto>(res, model);
+        }
+
+        public async Task<List<Photo>> GetUserPhotosAsync(string userId)
+        {
+            var res = await _photoRepo.GetPhotosByUserId(userId);
+            if (res != null)
+                return res;
+
+            return null;
+        }
+
+        public async Task<Photo> GetUserMainPhotoAsync(string userId)
+        {
+            var res = await _photoRepo.GetPhotosByUserId(userId);
+
+            var mainPhoto = res.FirstOrDefault(x => x.IsMain == true);
+
+            if (mainPhoto != null)
+                return mainPhoto;
+
+            return null;
+        }
+
+        public async Task<Tuple<bool, string>> SetMainPhotoAsync(string userId, string PublicId)
+        {
+            var photos = await _photoRepo.GetPhotosByUserId(userId);
+            if (photos != null)
+            {
+                this.UnsetMain(photos);
+
+                var newMain = photos.FirstOrDefault(x => x.PublicId == PublicId);
+                newMain.IsMain = true;
+
+                // update database
+                var res = await _photoRepo.Edit(newMain);
+                if (res)
+                    return new Tuple<bool, string>(true, newMain.Url);
+            }
+
+            return new Tuple<bool, string>(false, "");
+        }
+
+        public async Task<bool> UnSetMainPhotoAsync(string userId)
+        {
+            var photos = await _photoRepo.GetPhotosByUserId(userId);
+            if (photos != null)
+            {
+                this.UnsetMain(photos);
+
+                // update database
+                var res = await _photoRepo.SaveChanges();
+                if (res)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void UnsetMain(List<Photo> photos)
+        {
+            if (photos.Any(x => x.IsMain))
+            {
+                // get the main photo and unset it
+                var main = photos.FirstOrDefault(x => x.IsMain == true);
+                main.IsMain = false;
+            }
+        }
+
+        public async Task<bool> DeletePhotoAsync(string PublicId)
+        {
+            DeletionParams destroyParams = new DeletionParams(PublicId)
+            {
+                ResourceType = ResourceType.Image
+            };
+
+            DeletionResult destroyResult = _cloudinary.Destroy(destroyParams);
+
+            if (destroyResult.StatusCode.ToString().Equals("OK"))
+            {
+                var photo = await _photoRepo.GetPhotoByPublicId(PublicId);
+                if (photo != null)
+                {
+                    var res = await _photoRepo.Delete(photo);
+                    if (res)
+                        return true;
+                }
+            }
+
+            return false;
         }
 
     }
