@@ -6,7 +6,6 @@
 
 
   <ItemGroup>
-    <None Remove="Controllers\" />
     <None Remove="Swashbuckle.AspNetCore.Swagger" />
     <None Remove="Swashbuckle.AspNetCore" />
     <None Remove="Microsoft.IdentityModel.Tokens" />
@@ -17,9 +16,6 @@
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="CloudinaryDotNet" />
     <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
