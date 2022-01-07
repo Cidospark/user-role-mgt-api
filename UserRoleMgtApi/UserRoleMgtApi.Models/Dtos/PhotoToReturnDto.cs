@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WalkingSkeletonApi.Models;
-
-namespace WalkingSkeletonApi.DTOs
+﻿namespace UserRoleMgtApi.Models.Dtos
 {
     public class PhotoToReturnDto
     {
