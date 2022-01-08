@@ -14,14 +14,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup for develop main
-      working-directory: /UserRoleMgtApi
+      working-directory: ./UserRoleMgtApi/
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         APP_NAME: ${{ 'urm01' }}
       run: |
-        cd /UserRoleMgtApi
         docker build -t urm-api .
-        docker tag urm01 registry.heroku.com/$APP_NAME/web
+        docker tag urm-api registry.heroku.com/$APP_NAME/web
         docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
         heroku container:push web -a $APP_NAME
         heroku container:release web -a $APP_NAME
