@@ -4,7 +4,7 @@ using UserRoleMgtApi.Models;
 
 namespace UserRoleMgtApi.Data.EFCore.Repositories
 {
-    public interface IPhotoRepository : ICRUDRepo
+    public interface IUserPhotoRepository : ICRUDRepo
     {
         Task<bool> SaveChanges();
         Task<List<Photo>> GetPhotos();

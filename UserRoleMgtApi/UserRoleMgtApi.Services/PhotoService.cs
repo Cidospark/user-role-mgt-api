@@ -15,25 +15,18 @@ using UserRoleMgtApi.Models.Dtos;
 
 namespace UserRoleMgtApi.Services
 {
-    public class PhotoService
+    public class PhotoService : IPhotoService
     {
-        private readonly UserManager<User> _userMgr;
-        private readonly IPhotoRepository _photoRepo;
         private readonly Cloudinary _cloudinary;
-        private readonly IMapper _mapper;
 
         public PhotoService(IOptions<CloudinarySettings> config,
-            IMapper mapper, UserManager<User> userManager,
-            IPhotoRepository photoRepository)
+            IMapper mapper, UserManager<User> userManager)
         {
             var acc = new Account(config.Value.CloudName, config.Value.ApiKey, config.Value.ApiSecret);
             _cloudinary = new Cloudinary(acc);
-            _mapper = mapper;
-            _userMgr = userManager;
-            _photoRepo = photoRepository;
         }
 
-        public async Task<Tuple<bool, PhotoUploadDto>> UploadPhotoAsync(PhotoUploadDto model, string userId)
+        public async Task<Tuple<bool, PhotoUploadDto>> UploadPhotoAsync(PhotoUploadDto model)
         {
             var uploadResult = new ImageUploadResult();
 
@@ -61,88 +54,6 @@ namespace UserRoleMgtApi.Services
 
         }
 
-        public async Task<Tuple<bool, PhotoUploadDto>> AddPhotoAsync(PhotoUploadDto model, string userId)
-        {
-            var user = await _userMgr.Users.Include(x => x.Photos).FirstOrDefaultAsync(x => x.Id == userId);
-
-            var photo = _mapper.Map<Photo>(model);
-            photo.Id = userId;
-
-            if (!user.Photos.Any(x => x.IsMain))
-                photo.IsMain = true;
-
-            // add photo to database
-            var res = await _photoRepo.Add(photo);
-
-            return new Tuple<bool, PhotoUploadDto>(res, model);
-        }
-
-        public async Task<List<Photo>> GetUserPhotosAsync(string userId)
-        {
-            var res = await _photoRepo.GetPhotosByUserId(userId);
-            if (res != null)
-                return res;
-
-            return null;
-        }
-
-        public async Task<Photo> GetUserMainPhotoAsync(string userId)
-        {
-            var res = await _photoRepo.GetPhotosByUserId(userId);
-
-            var mainPhoto = res.FirstOrDefault(x => x.IsMain == true);
-
-            if (mainPhoto != null)
-                return mainPhoto;
-
-            return null;
-        }
-
-        public async Task<Tuple<bool, string>> SetMainPhotoAsync(string userId, string PublicId)
-        {
-            var photos = await _photoRepo.GetPhotosByUserId(userId);
-            if (photos != null)
-            {
-                this.UnsetMain(photos);
-
-                var newMain = photos.FirstOrDefault(x => x.PublicId == PublicId);
-                newMain.IsMain = true;
-
-                // update database
-                var res = await _photoRepo.Edit(newMain);
-                if (res)
-                    return new Tuple<bool, string>(true, newMain.Url);
-            }
-
-            return new Tuple<bool, string>(false, "");
-        }
-
-        public async Task<bool> UnSetMainPhotoAsync(string userId)
-        {
-            var photos = await _photoRepo.GetPhotosByUserId(userId);
-            if (photos != null)
-            {
-                this.UnsetMain(photos);
-
-                // update database
-                var res = await _photoRepo.SaveChanges();
-                if (res)
-                    return true;
-            }
-
-            return false;
-        }
-
-        private void UnsetMain(List<Photo> photos)
-        {
-            if (photos.Any(x => x.IsMain))
-            {
-                // get the main photo and unset it
-                var main = photos.FirstOrDefault(x => x.IsMain == true);
-                main.IsMain = false;
-            }
-        }
-
         public async Task<bool> DeletePhotoAsync(string PublicId)
         {
             DeletionParams destroyParams = new DeletionParams(PublicId)
@@ -150,17 +61,11 @@ namespace UserRoleMgtApi.Services
                 ResourceType = ResourceType.Image
             };
 
-            DeletionResult destroyResult = _cloudinary.Destroy(destroyParams);
+            DeletionResult destroyResult = await _cloudinary.DestroyAsync(destroyParams);
 
             if (destroyResult.StatusCode.ToString().Equals("OK"))
             {
-                var photo = await _photoRepo.GetPhotoByPublicId(PublicId);
-                if (photo != null)
-                {
-                    var res = await _photoRepo.Delete(photo);
-                    if (res)
-                        return true;
-                }
+                return true;
             }
 
             return false;
