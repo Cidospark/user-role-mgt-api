@@ -1,4 +1,4 @@
-name: .NET
+name: CI to develop branch
 
 on:
   push:
