@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup for develop main
+    - name: Check out code
       working-directory: ./UserRoleMgtApi/
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
