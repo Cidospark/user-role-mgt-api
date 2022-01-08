@@ -18,6 +18,7 @@ jobs:
       with:
         dotnet-version: 3.1
     - name: Restore dependencies
+      working-directory: ./UserRoleMgtApi
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
