@@ -16,15 +16,15 @@ namespace UserRoleMgtApi.Core.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class PhotoController : Controller
+    public class UserController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
+        private readonly IUserService _userService;
 
-        public PhotoController(IMapper mapper, IPhotoService photoService)
+        public UserController(IMapper mapper, IUserService userService)
         {
             _mapper = mapper;
-            _photoService = photoService;
+            _userService = userService;
         }
 
         [HttpPost("add-photo")]
@@ -44,22 +44,15 @@ namespace UserRoleMgtApi.Core.Controllers
 
             if (file.Length > 0)
             {
-                var uploadStatus = await _photoService.UploadPhotoAsync(model, userId);
+                var res = await _userService.AddPhotoAsync(model, userId);
 
-                if (uploadStatus.Item1)
+                if (res.Item1)
                 {
-                    var res = await _photoService.AddPhotoAsync(model, userId);
-                    if (!res.Item1)
-                    {
-                        ModelState.AddModelError("Failed", "Could not add photo to database");
-                        return BadRequest(Util.BuildResponse<ImageUploadResult>(false, "Failed to add to database", ModelState, null));
-                    }
-
-                    return Ok(Util.BuildResponse<object>(true, "Uploaded successfully", null, new { res.Item2.PublicId, res.Item2.Url }));
+                    return Ok(Util.BuildResponse<object>(true, "Added successfully!", null, new { res.Item2.PublicId, res.Item2.Url }));
                 }
 
-                ModelState.AddModelError("Failed", "File could not be uploaded to cloudinary");
-                return BadRequest(Util.BuildResponse<ImageUploadResult>(false, "Failed to upload", ModelState, null));
+                ModelState.AddModelError("Failed", "File could not be added.");
+                return BadRequest(Util.BuildResponse<ImageUploadResult>(false, "Failed to add", ModelState, null));
 
             }
 
@@ -73,7 +66,7 @@ namespace UserRoleMgtApi.Core.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetUserPhotos(string userId)
         {
-            var photos = await _photoService.GetUserPhotosAsync(userId);
+            var photos = await _userService.GetUserPhotosAsync(userId);
             if (photos == null)
             {
                 ModelState.AddModelError("Not found", "No result found for photos");
@@ -97,7 +90,7 @@ namespace UserRoleMgtApi.Core.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetUserMainPhoto(string userId)
         {
-            var photo = await _photoService.GetUserMainPhotoAsync(userId);
+            var photo = await _userService.GetUserMainPhotoAsync(userId);
             if (photo == null)
             {
                 ModelState.AddModelError("Not found", "No result found for main photo");
@@ -125,7 +118,7 @@ namespace UserRoleMgtApi.Core.Controllers
                 return BadRequest(result2);
             }
 
-            var res = await _photoService.SetMainPhotoAsync(userId, publicId);
+            var res = await _userService.SetMainPhotoAsync(userId, publicId);
             if (!res.Item1)
             {
                 ModelState.AddModelError("Failed", "Could not set main photo");
@@ -149,7 +142,7 @@ namespace UserRoleMgtApi.Core.Controllers
                 return BadRequest(result2);
             }
 
-            var res = await _photoService.UnSetMainPhotoAsync(userId);
+            var res = await _userService.UnSetMainPhotoAsync(userId);
             if (!res)
             {
                 ModelState.AddModelError("Failed", "Could not unset main photo");
@@ -174,7 +167,7 @@ namespace UserRoleMgtApi.Core.Controllers
                 return BadRequest(result2);
             }
 
-            var res = await _photoService.DeletePhotoAsync(publicId);
+            var res = await _userService.DeletePhotoAsync(publicId);
             if (!res)
             {
                 ModelState.AddModelError("Failed", "Could not delete photo");
