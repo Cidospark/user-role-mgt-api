@@ -1,6 +1,8 @@
 name: CD to heroku
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
@@ -11,12 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup for develop main
-      working-directory: ./UserRoleMgtApi/UserRoleMgtApi.Core/
+    - name: Check out code
+      working-directory: ./UserRoleMgtApi/
       env: 
-        APP_API_KEY: ${{ secrets.APP_API_KEY }}
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         APP_NAME: ${{ 'urm01' }}
       run: |
-        docker login --username=_ --password=$APP_API_KEY registry.heroku.com
+        docker build -t urm-api .
+        docker tag urm-api registry.heroku.com/$APP_NAME/web
+        docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
         heroku container:push web -a $APP_NAME
         heroku container:release web -a $APP_NAME
