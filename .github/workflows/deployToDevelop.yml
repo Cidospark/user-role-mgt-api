@@ -1,4 +1,4 @@
-name: .NET
+name: CI to develop branch
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ develop ]
 
 jobs:
-  build:
+  build_dev:
 
     runs-on: ubuntu-latest
 
@@ -18,8 +18,11 @@ jobs:
       with:
         dotnet-version: 3.1
     - name: Restore dependencies
+      working-directory: ./UserRoleMgtApi
       run: dotnet restore
     - name: Build
+      working-directory: ./UserRoleMgtApi
       run: dotnet build --no-restore
     - name: Test
+      working-directory: ./UserRoleMgtApi
       run: dotnet test --no-build --verbosity normal
