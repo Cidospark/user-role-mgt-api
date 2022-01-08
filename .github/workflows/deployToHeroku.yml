@@ -19,6 +19,6 @@ jobs:
         APP_API_KEY: ${{ secrets.APP_API_KEY }}
         APP_NAME: ${{ 'urm01' }}
       run: |
-        docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+        docker login --username=_ --password=$APP_API_KEY registry.heroku.com
         heroku container:push web -a $APP_NAME
         heroku container:release web -a $APP_NAME
