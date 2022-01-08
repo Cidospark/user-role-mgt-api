@@ -6,11 +6,11 @@ using UserRoleMgtApi.Models;
 
 namespace UserRoleMgtApi.Data.EFCore.Repositories
 {
-    public class PhotoRepository : IPhotoRepository
+    public class UserPhotoRepository : IUserPhotoRepository
     {
         private readonly AppDbContext _ctx;
 
-        public PhotoRepository(AppDbContext ctx)
+        public UserPhotoRepository(AppDbContext ctx)
         {
             _ctx = ctx;
         }

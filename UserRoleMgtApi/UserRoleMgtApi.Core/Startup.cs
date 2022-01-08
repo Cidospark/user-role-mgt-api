@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using UserRoleMgtApi.Models;
 using UserRoleMgtApi.Helpers;
 using AutoMapper;
+using UserRoleMgtApi.Data.EFCore.Repositories;
 
 namespace UserRoleMgtApi.Core
 {
@@ -35,6 +36,9 @@ namespace UserRoleMgtApi.Core
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
             services.AddScoped<IJWTService, JWTService>();
+            services.AddScoped<IUserPhotoRepository, UserPhotoRepository>();
+            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IUserService, UserService>();
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
             services.AddSwaggerGen(c =>
