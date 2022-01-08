@@ -21,6 +21,8 @@ jobs:
       working-directory: ./UserRoleMgtApi
       run: dotnet restore
     - name: Build
+      working-directory: ./UserRoleMgtApi
       run: dotnet build --no-restore
     - name: Test
+      working-directory: ./UserRoleMgtApi
       run: dotnet test --no-build --verbosity normal
