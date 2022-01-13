@@ -15,6 +15,7 @@ using UserRoleMgtApi.Models;
 using UserRoleMgtApi.Helpers;
 using AutoMapper;
 using UserRoleMgtApi.Data.EFCore.Repositories;
+using UserRoleMgtApi.Data;
 
 namespace UserRoleMgtApi.Core
 {
@@ -35,6 +36,7 @@ namespace UserRoleMgtApi.Core
             services.AddDbContextPool<AppDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
+            services.AddTransient<Seeder>();
             services.AddScoped<IJWTService, JWTService>();
             services.AddScoped<IUserPhotoRepository, UserPhotoRepository>();
             services.AddScoped<IPhotoService, PhotoService>();
@@ -89,7 +91,8 @@ namespace UserRoleMgtApi.Core
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            Seeder seeder)
         {
             if (env.IsDevelopment())
             {
@@ -105,6 +108,8 @@ namespace UserRoleMgtApi.Core
             {
                 endpoints.MapControllers();
             });
+
+            seeder.SeedIt().Wait();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "User Role Manager - v1"));

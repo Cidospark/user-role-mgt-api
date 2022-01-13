@@ -114,6 +114,7 @@ namespace UserRoleMgtApi.Core.Controllers
         }
 
         [HttpGet("get-users")]
+        [AllowAnonymous]
         public IActionResult GetUsers(int page, int perPage)
         {
             // map data from db to dto to reshape it and remove null fields
