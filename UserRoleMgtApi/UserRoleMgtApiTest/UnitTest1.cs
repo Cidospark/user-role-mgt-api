@@ -5,6 +5,7 @@ namespace UserRoleMgtApiTest
     public class Tests
     {
         [SetUp]
+        [Ignore("Skipped")]
         public void Setup()
         {
         }
