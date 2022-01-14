@@ -33,7 +33,7 @@ namespace UserRoleMgtApi.Core
         {
             services.AddControllers();
 
-            services.AddDbContextPool<AppDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddDbContextPool<AppDbContext>(opt => opt.UseSqlite(Configuration.GetConnectionString("Default")));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
             services.AddTransient<Seeder>();
