@@ -39,7 +39,12 @@ namespace UserRoleMgtApi.Data
                     }
                 }
 
-                var data = System.IO.File.ReadAllText("../UserRoleMgtApi.Data/SeedData.json");
+                //var path = "";
+
+                //if()
+
+                //var data = System.IO.File.ReadAllText("../UserRoleMgtApi.Data/SeedData.json");
+                var data = System.IO.File.ReadAllText("/app/SeedData.json");
                 var ListOfAppUsers = JsonConvert.DeserializeObject<List<User>>(data);
 
                 if (!_userMgr.Users.Any())
