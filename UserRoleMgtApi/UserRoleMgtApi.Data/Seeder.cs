@@ -24,7 +24,7 @@ namespace UserRoleMgtApi.Data
             _roleMgr = roleManager;
         }
 
-        public async Task SeedIt()
+        public async Task SeedIt(string envName)
         {
             _ctx.Database.EnsureCreated();
 
@@ -39,12 +39,13 @@ namespace UserRoleMgtApi.Data
                     }
                 }
 
-                //var path = "";
+                var path = "/app/SeedData.json";
 
-                //if()
+                if (envName.ToString().Equals("Development"))
+                    path = "../UserRoleMgtApi.Data/SeedData.json";
 
                 //var data = System.IO.File.ReadAllText("../UserRoleMgtApi.Data/SeedData.json");
-                var data = System.IO.File.ReadAllText("/app/SeedData.json");
+                var data = System.IO.File.ReadAllText(path);
                 var ListOfAppUsers = JsonConvert.DeserializeObject<List<User>>(data);
 
                 if (!_userMgr.Users.Any())

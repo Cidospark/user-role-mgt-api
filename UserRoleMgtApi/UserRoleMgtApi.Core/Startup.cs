@@ -109,7 +109,7 @@ namespace UserRoleMgtApi.Core
                 endpoints.MapControllers();
             });
 
-            seeder.SeedIt().Wait();
+            seeder.SeedIt(env.EnvironmentName).Wait();
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "User Role Manager - v1"));
